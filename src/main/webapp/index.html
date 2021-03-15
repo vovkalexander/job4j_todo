@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ToDoList</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&amp;display=swap" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <style>
+        #jackdaw{
+            width: 500px;
+            margin-top: 11%;
+            float: right;
+        }
+
+        #table{
+            margin-left: 10%;
+            margin-top: 2%;
+        }
+        #input{
+            height: 60px;
+            width: 300px;
+            margin-top: 3%;
+        }
+    </style>
+</head>
+<body onload="showList()">
+<script>
+    function addItem() {
+        var rst ={'desc': $('#input').val()};
+        var userJson = JSON.stringify(rst);
+        $.ajax({
+            type: 'POST',
+            crossdomain: true,
+            url: 'http://localhost:8080//todo/list.do',
+            data: userJson,
+            contentType: "application/json",
+            success: function (data) {
+                console.log(data);
+            },
+            error:  function(xhr, str){
+                alert('Возникла ошибка: ' + xhr.responseCode);
+            }
+
+        });
+    }
+</script>
+
+<script>
+    function showList() {
+        var url = 'http://localhost:8080//todo/show.do'
+        if ($('input[type=checkbox]').prop('checked')){
+            url = 'http://localhost:8080//todo/undone.do'
+        }
+        $.ajax({
+            type: 'GET',
+            crossdomain: true,
+            url: url,
+            dataType: 'json'
+        }).done(function (data) {
+            var dataItem = JSON.stringify(data);
+            var listItem = JSON.parse(dataItem );
+            $('#table tbody tr ').empty();
+            for (var i = 0; i < listItem.length; i++) {
+                var id = listItem[i].id;
+                $('#table > tbody ').append('<tr>' +
+                    '<td>' + id + '</td>' +
+                    '<td>' +listItem[i].description+ '</td>' +
+                    '<td>' +listItem[i].created + '</td>' +
+                    '<td>' +'<input type="checkbox"  id="tick"    onclick = "return putTick('+id+')">' + '</td>' +
+                    ' </tr>')
+                //  if (listItem[i].done === true) {
+                //      $('#tick').attr('checked', true);
+                //       console.log(listItem[i].done)
+
+                //   }
+            }
+
+        }).fail(function (err) {
+            alert(err);
+        });
+
+    }
+</script>
+
+<script>
+    function  putTick(taskId) {
+        if ($('#tick').is(':checked')) {
+            console.log(taskId);
+            var rst = {'id': taskId};
+            $.ajax({
+                type: 'POST',
+                crossdomain: true,
+                url: 'http://localhost:8080//todo/tick.do',
+                data: rst,
+                success: function (data) {
+                    console.log(data);
+                },
+                error: function (xhr, str) {
+                    alert('Возникла ошибка: ' + xhr.responseCode);
+                }
+
+            });
+        }
+    }
+
+</script>
+
+<div class="container">
+    <div id = "jackdaw" >
+        <label for="check" >Список нерешенных задач</label>
+        <input type="checkbox"  id="check" onclick="return showList();">
+    </div>
+    <form method="POST"  >
+        <div class="form-group" id="form">
+            <input type="text" class="form-control" id="input" name="description"   placeholder="Описание">
+            <label for="input" >Введите описание</label>
+        </div>
+        <button type="submit" class="btn btn-primary" onclick="return addItem()" >Добавить</button>
+    </form>
+</div>
+
+<table id = "table" style="border: 1px solid #000000" border="1" cellpadding="1" cellspacing="0" width="370" >
+    <thead >
+    <tr>
+        <th>Номер</th>
+        <th>Описание</th>
+        <th>Дата</th>
+        <th>Выполнение</th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+</body>
+</html>

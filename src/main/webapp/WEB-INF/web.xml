@@ -4,4 +4,37 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+  <servlet>
+    <servlet-name>DoListServlet</servlet-name>
+    <servlet-class>ru.job4j.todolist.servlet.AddItemServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ShowListServlet</servlet-name>
+    <servlet-class>ru.job4j.todolist.servlet.ShowListServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>UndoneItemServlet</servlet-name>
+    <servlet-class>ru.job4j.todolist.servlet.UndoneItemServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ReplaceDoneServlet</servlet-name>
+    <servlet-class>ru.job4j.todolist.servlet.ReplaceDoneServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>DoListServlet</servlet-name>
+    <url-pattern>/list.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>UndoneItemServlet</servlet-name>
+    <url-pattern>/undone.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ShowListServlet</servlet-name>
+    <url-pattern>/show.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ReplaceDoneServlet</servlet-name>
+    <url-pattern>/tick.do</url-pattern>
+  </servlet-mapping>
 </web-app>
