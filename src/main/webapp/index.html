@@ -12,20 +12,17 @@
     <style>
         #jackdaw{
             width: 500px;
-            margin-top: 11%;
+            margin-top: 4.8%;
             float: right;
-        }
-
-        #table{
-            margin-left: 10%;
-            margin-top: 2%;
         }
         #input{
             height: 60px;
             width: 300px;
-            margin-top: 3%;
         }
+
     </style>
+
+
 </head>
 <body onload="showList()">
 <script>
@@ -39,7 +36,9 @@
             data: userJson,
             contentType: "application/json",
             success: function (data) {
-                console.log(data);
+                $(document).ready(function(){
+                    showList()
+                });
             },
             error:  function(xhr, str){
                 alert('Возникла ошибка: ' + xhr.responseCode);
@@ -51,9 +50,9 @@
 
 <script>
     function showList() {
-        var url = 'http://localhost:8080//todo/show.do'
+        var url = 'http://localhost:8080//todo/undone.do'
         if ($('input[type=checkbox]').prop('checked')){
-            url = 'http://localhost:8080//todo/undone.do'
+            url = 'http://localhost:8080//todo/show.do'
         }
         $.ajax({
             type: 'GET',
@@ -63,33 +62,30 @@
         }).done(function (data) {
             var dataItem = JSON.stringify(data);
             var listItem = JSON.parse(dataItem );
-            $('#table tbody tr ').empty();
+            $('#table tbody ').empty();
             for (var i = 0; i < listItem.length; i++) {
                 var id = listItem[i].id;
-                $('#table > tbody ').append('<tr>' +
-                    '<td>' + id + '</td>' +
-                    '<td>' +listItem[i].description+ '</td>' +
-                    '<td>' +listItem[i].created + '</td>' +
-                    '<td>' +'<input type="checkbox"  id="tick"    onclick = "return putTick('+id+')">' + '</td>' +
-                    ' </tr>')
-                //  if (listItem[i].done === true) {
-                //      $('#tick').attr('checked', true);
-                //       console.log(listItem[i].done)
-
-                //   }
+                $('#table > tbody ').append('<tr>');
+                $('#table > tbody ').append('<td>' + id + '</td>');
+                $('#table > tbody ').append('<td>' +listItem[i].description + '</td>');
+                $('#table > tbody ').append('<td>' +listItem[i].created + '</td>');
+                if (listItem[i].done === true) {
+                    $('#table > tbody ').append('<td>' + '<input type="checkbox"  id="tick"  checked  onclick = "return putTick(' + id + ')">' + '</td>');
+                } else {
+                    $('#table > tbody ').append('<td>' + '<input type="checkbox"  id="tick"    onclick = "return putTick(' + id + ')">' + '</td>');
+                }
+                $('#table > tbody ').append('/<tr>');
             }
 
         }).fail(function (err) {
             alert(err);
         });
-
     }
 </script>
 
 <script>
     function  putTick(taskId) {
         if ($('#tick').is(':checked')) {
-            console.log(taskId);
             var rst = {'id': taskId};
             $.ajax({
                 type: 'POST',
@@ -97,7 +93,9 @@
                 url: 'http://localhost:8080//todo/tick.do',
                 data: rst,
                 success: function (data) {
-                    console.log(data);
+                    $(document).ready(function(){
+                        showList()
+                    });
                 },
                 error: function (xhr, str) {
                     alert('Возникла ошибка: ' + xhr.responseCode);
@@ -106,34 +104,34 @@
             });
         }
     }
-
 </script>
 
 <div class="container">
     <div id = "jackdaw" >
-        <label for="check" >Список нерешенных задач</label>
+        <label for="check" >Список  задач</label>
         <input type="checkbox"  id="check" onclick="return showList();">
     </div>
-    <form method="POST"  >
-        <div class="form-group" id="form">
-            <input type="text" class="form-control" id="input" name="description"   placeholder="Описание">
-            <label for="input" >Введите описание</label>
-        </div>
-        <button type="submit" class="btn btn-primary" onclick="return addItem()" >Добавить</button>
-    </form>
+    <div class="form-group" id="form">
+        <form method="POST"  >
+            <input type="text" class="form-control" id="input" name="description"   placeholder="Описание задачи">
+                <label for="input" >Введите описание</label>
+            <div id = "buttom" >
+            <button type="submit" class="btn btn-primary" onclick="return addItem()" >Добавить</button>
+            </div>
+        </form>
+    </div>
+    <table id = "table" style="border: 1px solid #000000" border="1" cellpadding="1" cellspacing="0" width="370" >
+        <thead >
+        <tr>
+            <th>Номер</th>
+            <th>Описание</th>
+            <th>Дата</th>
+            <th>Выполнение</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
 </div>
-
-<table id = "table" style="border: 1px solid #000000" border="1" cellpadding="1" cellspacing="0" width="370" >
-    <thead >
-    <tr>
-        <th>Номер</th>
-        <th>Описание</th>
-        <th>Дата</th>
-        <th>Выполнение</th>
-    </tr>
-    </thead>
-    <tbody>
-    </tbody>
-</table>
 </body>
 </html>
