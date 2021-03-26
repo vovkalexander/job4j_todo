@@ -11,6 +11,9 @@ public class Item {
     private int id;
     private String description;
     private Date created;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
     @Column(columnDefinition = "boolean default false")
     private boolean done;
 
@@ -39,6 +42,14 @@ public class Item {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public User getUser() {
+        return this.user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public boolean isDone() {

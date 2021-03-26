@@ -4,6 +4,10 @@
 
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
+   <filter>
+    <filter-name>AuthFilter</filter-name>
+    <filter-class>ru.job4j.todolist.filter.AuthFilter</filter-class>
+  </filter>
   <servlet>
     <servlet-name>DoListServlet</servlet-name>
     <servlet-class>ru.job4j.todolist.servlet.AddItemServlet</servlet-class>
@@ -19,6 +23,22 @@
   <servlet>
     <servlet-name>ReplaceDoneServlet</servlet-name>
     <servlet-class>ru.job4j.todolist.servlet.ReplaceDoneServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>RegServlet</servlet-name>
+    <servlet-class>ru.job4j.todolist.servlet.RegServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AuthServlet</servlet-name>
+    <servlet-class>ru.job4j.todolist.servlet.AuthServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ExitServlet</servlet-name>
+    <servlet-class>ru.job4j.todolist.servlet.ExitServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>DisplayUserServlet</servlet-name>
+    <servlet-class>ru.job4j.todolist.servlet.DisplayUserServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -37,4 +57,24 @@
     <servlet-name>ReplaceDoneServlet</servlet-name>
     <url-pattern>/tick.do</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegServlet</servlet-name>
+    <url-pattern>/reg.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AuthServlet</servlet-name>
+    <url-pattern>/auth.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ExitServlet</servlet-name>
+    <url-pattern>/exit.do</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>DisplayUserServlet</servlet-name>
+    <url-pattern>/display.do</url-pattern>
+  </servlet-mapping>
+  <filter-mapping>
+      <filter-name>AuthFilter</filter-name>
+      <url-pattern>/index.html</url-pattern>
+    </filter-mapping>
 </web-app>

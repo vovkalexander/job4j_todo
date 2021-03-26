@@ -1,6 +1,5 @@
 <!doctype html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>ToDoList</title>
@@ -19,12 +18,12 @@
             height: 60px;
             width: 300px;
         }
-
+        table th,td {text-align: center;}
     </style>
 
 
 </head>
-<body onload="showList()">
+<body onload="showList(); displayUser()">
 <script>
     function addItem() {
         var rst ={'desc': $('#input').val()};
@@ -69,6 +68,7 @@
                 $('#table > tbody ').append('<td>' + id + '</td>');
                 $('#table > tbody ').append('<td>' +listItem[i].description + '</td>');
                 $('#table > tbody ').append('<td>' +listItem[i].created + '</td>');
+                $('#table > tbody ').append('<td>' +listItem[i].user.name + '</td>');
                 if (listItem[i].done === true) {
                     $('#table > tbody ').append('<td>' + '<input type="checkbox"  id="tick"  checked  onclick = "return putTick(' + id + ')">' + '</td>');
                 } else {
@@ -106,7 +106,34 @@
     }
 </script>
 
+<script>
+    function  displayUser() {
+        var name = document.getElementById("username");
+        $.ajax({
+            type: 'GET',
+            crossdomain: true,
+            url: 'http://localhost:8080//todo/display.do',
+            dataType: 'json',
+            success: function (data) {
+            name.innerHTML = data["showUser"] + " | Выйти";
+            },
+            error: function (xhr, str) {
+                alert('Возникла ошибка: ' + xhr.responseCode);
+            }
+
+        });
+    }
+
+</script>
+
 <div class="container">
+    <div class="row">
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link" id="username" href="http://localhost:8080//todo/exit.do"> </a>
+            </li>
+        </ul>
+    </div>
     <div id = "jackdaw" >
         <label for="check" >Список  задач</label>
         <input type="checkbox"  id="check" onclick="return showList();">
@@ -120,12 +147,13 @@
             </div>
         </form>
     </div>
-    <table id = "table" style="border: 1px solid #000000" border="1" cellpadding="1" cellspacing="0" width="370" >
+    <table id = "table" style="border: 1px solid #000000" border="1" cellpadding="1" cellspacing="0" width="420"  >
         <thead >
         <tr>
             <th>Номер</th>
             <th>Описание</th>
             <th>Дата</th>
+            <th>Пользователь</th>
             <th>Выполнение</th>
         </tr>
         </thead>

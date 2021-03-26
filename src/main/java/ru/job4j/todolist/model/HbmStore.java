@@ -30,11 +30,12 @@ public class HbmStore implements Store, AutoCloseable {
     }
 
     @Override
-    public Item save(String text) {
+    public Item save(String text, User user) {
         return this.tx(session -> {
             Item item = new Item();
             item.setCreated(new Date());
             item.setDescription(text);
+            item.setUser(user);
             session.save(item);
             return item;
         });
@@ -53,6 +54,26 @@ public class HbmStore implements Store, AutoCloseable {
             session.update(item);
             return null;
         });
+    }
+
+    @Override
+    public User saveUser(String name, String email, String password) {
+        return (User) this.tx(session -> {
+            User user = new User();
+            user.setName(name);
+            user.setEmail(email);
+            user.setPassword(password);
+            session.save(user);
+
+            return user;
+        });
+    }
+
+    @Override
+    public User findUserByDate(String email, String password) {
+        return (User) this.tx(session -> session.
+                createQuery("from ru.job4j.todolist.model.User where email like :email and password like :password").
+                setParameter("email", email).setParameter("password", password).getSingleResult());
     }
 
     @Override
