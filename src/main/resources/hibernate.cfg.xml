@@ -18,6 +18,9 @@
         <mapping class="ru.job4j.todolist.model.User" />
         <mapping class="ru.job4j.todolist.simple.Brand"/>
         <mapping class="ru.job4j.todolist.simple.CarModel"/>
+        <mapping class="ru.job4j.todolist.simple1.Car"/>
+        <mapping class="ru.job4j.todolist.simple1.Engine"/>
+        <mapping class="ru.job4j.todolist.simple1.Driver"/>
 
     </session-factory>
 </hibernate-configuration>
